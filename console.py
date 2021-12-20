@@ -126,6 +126,7 @@ class HBNBCommand(cmd.Cmd):
             return
         else:
             #--------------20/12--------------
+            dict_att = {}
             print("0: {}".format(arggs[0]))
             print("1: {}".format(arggs[1]))
             print("2: {}".format(arggs[2]))
@@ -136,7 +137,17 @@ class HBNBCommand(cmd.Cmd):
             print(list_att)
             print(type(list_att))
             for i in list_att:
-                print('key: '+i.split('=')[0]+' '+'value: '+i.split('=')[1])
+                dict_att[i.split('=')[0]] = i.split('=')[1]
+            for key, value in dict_att.items():
+                if value[0] == '"':
+                    print(value[0])
+                    dict_att[key] = value[1:-1]
+                    if '_' in value:
+                        dict_att[key] = value[1:-1].replace('_', ' ')
+                        if '"' in value:
+                            dict_att[key] = value[1:-1].replace('_', ' ').replace('"','\\')
+            print(dict_att)
+            print(type(dict_att))
             #list_eq = list_att[0].split('=')
             #print(list_eq[0])
             #print(list_eq[1])
