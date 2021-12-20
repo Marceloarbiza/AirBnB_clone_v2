@@ -8,7 +8,13 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
-    def all(self):
+    
+    def delete(self, obj=None):
+        """ Delete obj from __objects """
+        cls = (str(type(obj)).split('.')[-1]).split('\'')[0]
+        FileStorage.__objects.pop(f'{cls}.{obj.id}')
+
+    def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         return FileStorage.__objects
 
