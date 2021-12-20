@@ -124,35 +124,26 @@ class HBNBCommand(cmd.Cmd):
         elif arggs[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        else:
-            #--------------20/12--------------
-            dict_att = {}
-            print("0: {}".format(arggs[0]))
-            print("1: {}".format(arggs[1]))
-            print("2: {}".format(arggs[2]))
-            print(arggs)
-            print(type(arggs))
-            arg2 = arggs[2]
-            list_att = arg2.split(' ')
-            print(list_att)
-            print(type(list_att))
-            for i in list_att:
-                dict_att[i.split('=')[0]] = i.split('=')[1]
-            for key, value in dict_att.items():
-                if value[0] == '"':
-                    print(value[0])
-                    dict_att[key] = value[1:-1]
-                    if '_' in value:
-                        dict_att[key] = value[1:-1].replace('_', ' ')
-                        if '"' in value:
-                            dict_att[key] = value[1:-1].replace('_', ' ').replace('"','\\')
-            print(dict_att)
-            print(type(dict_att))
-            #list_eq = list_att[0].split('=')
-            #print(list_eq[0])
-            #print(list_eq[1])
-            #---------------------------------
-        new_instance = HBNBCommand.classes[args]()
+        new_instance = HBNBCommand.classes[arggs[0]]()
+        #--------------20/12--------------
+        arg2 = arggs[2]
+        list_att = arg2.split(' ')
+        for i in list_att:
+            key = i.split('=')[0]
+            value = i.split('=')[1]
+            if value[0] == '"':
+                value = value[1:-1]
+                if '_' in value:
+                    value = value.replace('_', ' ')
+                    if '"' in value:
+                        value = value.replace('"', '\"')
+            else:
+                if '.' in value:
+                    value = float(value)
+                else:
+                    value = int(value)
+            setattr(new_instance, key, value)
+        #---------------------------------
         storage.save()
         print(new_instance.id)
         storage.save()
