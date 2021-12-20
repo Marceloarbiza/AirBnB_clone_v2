@@ -125,22 +125,23 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[arggs[0]]()
-        # --------------20/12--------------
-        arg2 = arggs[2]
-        list_att = arg2.split(' ')
-        for i in list_att:
-            key = i.split('=')[0]
-            value = i.split('=')[1].replace('_', ' ')
-            if value[0] == '"':
-                value = value[1:-1]
-                if '"' in value:
-                    value = value.replace('"', '\"')
-            else:
-                if '.' in value:
-                    value = float(value)
+        if arggs[2]:
+            # --------------20/12--------------
+            arg2 = arggs[2]
+            list_att = arg2.split(' ')
+            for i in list_att:
+                key = i.split('=')[0]
+                value = i.split('=')[1].replace('_', ' ')
+                if value[0] == '"':
+                    value = value[1:-1]
+                    if '"' in value:
+                        value = value.replace('"', '\"')
                 else:
-                    value = int(value)
-            setattr(new_instance, key, value)
+                    if '.' in value:
+                        value = float(value)
+                    else:
+                        value = int(value)
+                setattr(new_instance, key, value)
         # ---------------------------------
         storage.save()
         print(new_instance.id)
