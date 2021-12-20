@@ -130,11 +130,9 @@ class HBNBCommand(cmd.Cmd):
         list_att = arg2.split(' ')
         for i in list_att:
             key = i.split('=')[0]
-            value = i.split('=')[1]
+            value = i.split('=')[1].replace('_', ' ')
             if value[0] == '"':
                 value = value[1:-1]
-                if '_' in value:
-                    value = value.replace('_', ' ')
                     if '"' in value:
                         value = value.replace('"', '\"')
             else:
