@@ -16,6 +16,9 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
+        print(cls)
+        cls2 = (str(cls).split('.')[-1]).split('\'')[0]
+        print(cls2)
         return FileStorage.__objects
 
     def new(self, obj):
