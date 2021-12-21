@@ -10,8 +10,9 @@ class FileStorage:
 
     def delete(self, obj=None):
         """ Delete obj from __objects """
-        cls = (str(type(obj)).split('.')[-1]).split('\'')[0]
-        FileStorage.__objects.pop(f'{cls}.{obj.id}')
+        if obj:
+            cls = (str(type(obj)).split('.')[-1]).split('\'')[0]
+            FileStorage.__objects.pop(f'{cls}.{obj.id}')
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
