@@ -135,8 +135,8 @@ class HBNBCommand(cmd.Cmd):
                 if value[0] == '"' and value[len(value) - 1] == '"':
                     value = value.replace('_', ' ')
                     value = value[1:-1]
-                    # if '"' in value:
-                    # value = value.replace('"', '\"')
+                    if '"' in value:
+                        value = value.replace('"', '\"')
                 else:
                     if '.' in value:
                         value = float(value)
