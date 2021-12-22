@@ -115,19 +115,17 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, args):
         """ Create an object of any class"""
         # --------------20/12--------------
-        arggs = args.partition(" ")
+        list_att = args.split(' ')[1:]
         # ---------------------------------
         if not args:
             print("** class name missing **")
             return
-        elif arggs[0] not in HBNBCommand.classes:
+        elif args.split(' ')[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[arggs[0]]()
-        if arggs[2]:
+        new_instance = HBNBCommand.classes[args.split(' ')[0]]()
+        if list_att:
             # --------------20/12--------------
-            arg2 = arggs[2]
-            list_att = arg2.split(' ')
             for i in list_att:
                 key = i.split('=')[0]
                 value = i.split('=')[1]
@@ -220,18 +218,17 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
         print_list = []
-        modelstorage = models.storage.all(args)
 
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in modelstorage.items():
+            for k, v in storage._FileStorage__objects.items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in modelstorage.items():
+            for k, v in storage._FileStorage__objects.items():
                 print_list.append(str(v))
 
         print(print_list)
