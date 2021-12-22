@@ -3,6 +3,7 @@
 
 from sqlalchemy import (create_engine)
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import scoped_session
 from models.base_model import Base
 from models.state import State
 from models.city import City
@@ -12,13 +13,15 @@ from models.review import Review
 from models.amenity import Amenity
 import os
 
+
 class DBStorage():
     """ storage """
     __engine = None
     __session = None
+
     def __init__(self):
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'
-                                      .format(os.getenv('HBNB_MYSQL_USER'),
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(
+                                      os.getenv('HBNB_MYSQL_USER'),
                                       os.getenv('HBNB_MYSQL_PWD'),
                                       os.getenv('HBNB_MYSQL_HOST'),
                                       os.getenv('HBNB_MYSQL_DB')),
@@ -26,13 +29,13 @@ class DBStorage():
         self.__dict_class = {'State': State,
                              'City': City,
                              'User': User,
-                             'Place':Place,
+                             'Place': Place,
                              'Review': Review,
                              'Amenity': Amenity}
 
         if os.getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
-    
+
     def all(self, cls=None):
         """ all """
         dicto = {}
