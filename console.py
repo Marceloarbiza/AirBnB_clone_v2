@@ -129,13 +129,16 @@ class HBNBCommand(cmd.Cmd):
             for i in list_att:
                 key = i.split('=')[0]
                 value = i.split('=')[1]
-                if value[0] == '"':
+                if value[0] == '"' and value[len(value) - 1] == '"':
                     value = value.replace('_', ' ')
-                    value = value.replace('"', '')
-                elif value.isnumeric():
-                    value = int(value)
-                elif '.' in value:
-                    value = float(value)
+                    value = value[1:-1]
+                    if '"' in value:
+                        value = value.replace('"', '\"')
+                else:
+                    if '.' in value:
+                        value = float(value)
+                    else:
+                        value = int(value)
                 setattr(new_instance, key, value)
         # ---------------------------------
         new_instance.save()
