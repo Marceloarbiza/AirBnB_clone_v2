@@ -130,9 +130,9 @@ class HBNBCommand(cmd.Cmd):
             for i in list_att:
                 key = i.split('=')[0]
                 value = i.split('=')[1]
-                if cast(value) == 'int':
+                if int(value) == True:
                     value = int(value)
-                elif cast(value) == 'float':
+                elif float(value) == True:
                     value = float(value)
                 else:
                     value_ = value.strip('"').replace('_', ' ')
