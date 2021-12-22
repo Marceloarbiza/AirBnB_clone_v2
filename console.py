@@ -123,7 +123,8 @@ class HBNBCommand(cmd.Cmd):
         elif args.split(' ')[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args.split(' ')[0]]()
+        # new_instance = HBNBCommand.classes[args.split(' ')[0]]()
+        nu_object = eval("{}()".format(args.split(' ')[0]))
         # --------------20/12--------------
         if list_att:
             for i in list_att:
@@ -142,11 +143,13 @@ class HBNBCommand(cmd.Cmd):
                                 value = float(value)
                             except ValueError:
                                 continue
-                    setattr(new_instance, key, value)
+                    setattr(nu_object, key, value)
         # ---------------------------------
         storage.save()
-        new_instance.save()
-        print(new_instance.id)
+        # new_instance.save()
+        nu_object.save()
+        # print(new_instance.id)
+        print(nu_object.id)
 
     def help_create(self):
         """ Help information for the create method """
