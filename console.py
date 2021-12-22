@@ -130,12 +130,15 @@ class HBNBCommand(cmd.Cmd):
             for i in list_att:
                 key = i.split('=')[0]
                 value = i.split('=')[1]
-                if int(value) == True:
+                try:
+                    int(value)
                     value = int(value)
-                elif float(value) == True:
-                    value = float(value)
-                else:
-                    value_ = value.strip('"').replace('_', ' ')
+                except:
+                    try:
+                        float(value)
+                        value = float(value)
+                    except:
+                        value_ = value.strip('"').replace('_', ' ')
                 setattr(new_instance, key, value)
         # ---------------------------------
         new_instance.save()
