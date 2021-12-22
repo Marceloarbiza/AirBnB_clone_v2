@@ -37,7 +37,6 @@ class HBNBCommand(cmd.Cmd):
 
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
-
         Usage: <class name>.<command>([<id> [<*args> or <**kwargs>]])
         (Brackets denote optional fields in usage example.)
         """
@@ -116,29 +115,32 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, args):
         """ Create an object of any class"""
         # --------------20/12--------------
-        list_att = args.split(' ')[1:]
+        arggs = args.partition(" ")
         # ---------------------------------
         if not args:
             print("** class name missing **")
             return
-        elif args.split(' ')[0] not in HBNBCommand.classes:
+        elif arggs[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args.split(' ')[0]]()
-        if list_att:
+        new_instance = HBNBCommand.classes[arggs[0]]()
+        if arggs[2]:
             # --------------20/12--------------
+            arg2 = arggs[2]
+            list_att = arg2.split(' ')
             for i in list_att:
                 key = i.split('=')[0]
                 value = i.split('=')[1]
-                try:
-                    int(value)
-                    value = int(value)
-                except:
-                    try:
-                        float(value)
+                if value[0] == '"' and value[len(value) - 1] == '"':
+                    value = value.replace('_', ' ')
+                    value = value[1:-1]
+                    if '"' in value:
+                        value = value.replace('"', '\"')
+                else:
+                    if '.' in value:
                         value = float(value)
-                    except:
-                        value_ = value.strip('"').replace('_', ' ')
+                    else:
+                        value = int(value)
                 setattr(new_instance, key, value)
         # ---------------------------------
         new_instance.save()
