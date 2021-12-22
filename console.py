@@ -131,9 +131,8 @@ class HBNBCommand(cmd.Cmd):
                     key = i.split('=')[0]
                     value = i.split('=')[1]
                     if value[0] == value[-1] == '"':
-                        value = value[1:-1]
-                        value = value.replace('_', ' ')
                         value = value.replace('"', '')
+                        value = value.replace('_', ' ')
                     else:
                         try:
                             value = int(value)
