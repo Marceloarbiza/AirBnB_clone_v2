@@ -13,17 +13,15 @@ class State(BaseModel, Base):
     # name = ""
     name = Column(String(128), nullable=False)
 
-    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        cities = relationship('City', backref='state',
-			      cascade='all, delete-orphan')
-    else:
-        @property
-        def cities(self):
-            """ storage """
-            from models import storage
-            ret_cities = []
-            all_cities = storage.all(City)
-            for c in all_cities.values():
-                if c.state_id == seld.id:
-                    ret_cities.append(c)
-            return ret_cities
+    cities = relationship('City', backref='state',
+			  cascade='all, delete-orphan')
+    @property
+    def cities(self):
+        """ storage """
+        from models import storage
+        ret_cities = []
+        all_cities = storage.all(City)
+        for c in all_cities.values():
+            if c.state_id == seld.id:
+                ret_cities.append(c)
+        return ret_cities
