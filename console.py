@@ -124,16 +124,14 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         new_instance = HBNBCommand.classes[args.split(' ')[0]]()
+        # --------------20/12--------------
         if list_att:
-            # --------------20/12--------------
             for i in list_att:
                 key = i.split('=')[0]
                 value = i.split('=')[1]
-                if value[0] == '"' and value[len(value) - 1] == '"':
+                if value[0] == '"':
+                    value = value.strip('"')
                     value = value.replace('_', ' ')
-                    value = value[1:-1]
-                    if '"' in value:
-                        value = value.replace('"', '\"')
                 else:
                     if '.' in value:
                         value = float(value)
