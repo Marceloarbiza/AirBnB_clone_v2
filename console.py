@@ -127,20 +127,21 @@ class HBNBCommand(cmd.Cmd):
         # --------------20/12--------------
         if list_att:
             for i in list_att:
-                key = i.split('=')[0]
-                value = i.split('=')[1]
-                if value[0] == value[-1] == '"':
-                    value = value[1:-1]
-                    value = value.replace('_', ' ')
-                else:
-                    try:
-                        value = int(value)
-                    except ValueError:
+                if '=' in i:
+                    key = i.split('=')[0]
+                    value = i.split('=')[1]
+                    if value[0] == value[-1] == '"':
+                        value = value[1:-1]
+                        value = value.replace('_', ' ')
+                    else:
                         try:
-                            value = float(value)
+                            value = int(value)
                         except ValueError:
-                            continue
-                setattr(new_instance, key, value)
+                            try:
+                                value = float(value)
+                            except ValueError:
+                                continue
+                    setattr(new_instance, key, value)
         # ---------------------------------
         new_instance.save()
         print(new_instance.id)
