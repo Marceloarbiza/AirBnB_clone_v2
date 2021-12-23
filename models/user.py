@@ -3,7 +3,7 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
-
+from os import getenv
 
 class User(BaseModel, Base):
     """This class defines a user by various attributes"""
@@ -12,5 +12,8 @@ class User(BaseModel, Base):
     password = Column(String(128), nullable=False)
     first_name = Column(String(128), nullable=False)
     last_name = Column(String(128), nullable=False)
-    # places = relationship('Place', cascade="delete, all", backref='user')
-    # reviews = relationship('Review', cascade="delete, all", backref='user')
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        places = relationship('Place', cascade="all, delete-orphan",
+                              backref='user')
+        reviews = relationship('Review', cascade="all, delete-orphan",
+                               backref='user')
