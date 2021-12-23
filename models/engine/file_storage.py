@@ -2,25 +2,29 @@
 """This module defines a class to manage file storage for hbnb clone"""
 import json
 
-from models.place import Place
-
 
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
     __file_path = 'file.json'
     __objects = {}
 
+    def delete(self, obj=None):
+        """ Delete obj from __objects """
+        if obj:
+            cls = (str(type(obj)).split('.')[-1]).split('\'')[0]
+            FileStorage.__objects.pop(f'{cls}.{obj.id}')
+
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-        if cls is not None:
-            new_dict = {}
-            for key, value in self.__objects.items():
-                sp = key.split('.')
-                if sp[0] == cls.__name__:
-                    new_dict[key] = value
-            return new_dict
-        else:
-            return FileStorage.__objects
+        __objects_all_cls = {}
+        cls2 = (str(cls).split('.')[-1]).split('\'')[0]
+        if cls:
+            for k, v in FileStorage.__objects.items():
+                key_cls = k.split('.')[0]
+                if key_cls == cls2:
+                    __objects_all_cls[k] = v
+            return __objects_all_cls
+        return FileStorage.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -52,19 +56,9 @@ class FileStorage:
                   }
         try:
             temp = {}
-            with open(self.__file_path, 'r', encoding="utf-8") as f:
+            with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
                     self.all()[key] = classes[val['__class__']](**val)
-        except Exception:
+        except FileNotFoundError:
             pass
-
-    def delete(self, obj=None):
-        """ Instance public method to delete an obj"""
-        if obj is not None:
-            key_obj = None
-            for key, value in self.__objects.items():
-                if value == obj:
-                    key_obj = key
-                    break
-            del self.__objects[key_obj]
