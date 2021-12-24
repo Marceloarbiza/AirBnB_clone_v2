@@ -6,7 +6,6 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from os import getenv
 
-# Base = declarative_base()
 
 class City(BaseModel, Base):
     """ The city class, contains state ID and name """
