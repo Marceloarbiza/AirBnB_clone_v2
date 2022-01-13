@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # comment
 
-sudo apt update
-sudo apt install nginx
+sudo apt-get update -y
+sudo apt-get install nginx -y
 sudo ufw allow 'Nginx HTTP'
 sudo mkdir -p /data/web_static/shared/
 sudo mkdir -p /data/web_static/releases/test/
