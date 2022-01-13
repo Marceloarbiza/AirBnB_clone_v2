@@ -13,6 +13,8 @@ from fabric.api import env
 from datetime import datetime
 import os
 
+env.hosts = ['34.74.161.43', '35.185.60.222']
+
 
 def do_pack():
     """ do_pack """
@@ -31,16 +33,18 @@ def do_pack():
 def do_deploy(archive_path):
     """ do_deploy """
     if os.path.exists(archive_path):
-        upload = put(archive_path, "/tmp")
+        put(archive_path, "/tmp")
         ar_path_no_ext = archive_patch.split('.')[0]
         ar_path_no_ext = archive_patch.split('/')[1]
+        run("mkdir -p /data/web_static/releases/{}".format(ar_path_no_ext))
         ar_tmp = '/tmp/{}.tgz'.format(ar_path_no_ext)
         run("tar -xvzf {} -C /data/web_static/releases/{}"
             .format(ar_tmp, ar_path_no_ext))
         run("rm {}".format(ar_tmp))
-        run("rm /data/web_static/current")
-        run("ln -s /data/web_static/releases/{} /data/web_static/current"
+        run("rm -rf /data/web_static/current")
+        run("ln -sf /data/web_static/releases/{} /data/web_static/current"
             .format(ar_path_no_ext))
-        env.hosts = ['34.74.161.43', '35.185.60.222']
+        run("mv /data/web_static/releases/web_static_{}/web_static/* /data/web_static/releases/web_static_{}/".format(ar_path_no_ext, ar_path_no_ext))
+        run("rm -rf /data/web_static/releases/web_static_{}/web_static".format(ar_path_no_ext))
     else:
         return False
