@@ -44,7 +44,9 @@ def do_deploy(archive_path):
         run("rm -rf /data/web_static/current")
         run("ln -sf /data/web_static/releases/{} /data/web_static/current"
             .format(ar_path_no_ext))
-        run("mv /data/web_static/releases/web_static_{}/web_static/* /data/web_static/releases/web_static_{}/".format(ar_path_no_ext, ar_path_no_ext))
-        run("rm -rf /data/web_static/releases/web_static_{}/web_static".format(ar_path_no_ext))
+        run("mv /data/web_static/releases/web_static_{}/web_static/* /data/web_static/releases/web_static_{}/"
+            .format(ar_path_no_ext, ar_path_no_ext))
+        run("rm -rf /data/web_static/releases/web_static_{}/web_static"
+            .format(ar_path_no_ext))
     else:
         return False
