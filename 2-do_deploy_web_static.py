@@ -32,7 +32,9 @@ def do_pack():
 
 def do_deploy(archive_path):
     """ do_deploy """
-    if os.path.exists(archive_path):
+    if not os.path.exists(archive_path):
+        return False
+    try:
         put(archive_path, "/tmp")
         ar_path_no_ext = archive_patch.split('.')[0]
         ar_path_no_ext = archive_patch.split('/')[1]
@@ -48,5 +50,5 @@ def do_deploy(archive_path):
             .format(ar_path_no_ext, ar_path_no_ext))
         run("rm -rf /data/web_static/releases/web_static_{}/web_static"
             .format(ar_path_no_ext))
-    else:
-        return False
+    except:
+        False
