@@ -17,10 +17,10 @@ def do_pack():
     complete_time = datetime.now()
     string_time = complete_time.strftime("%Y%m%d%H%M%S")
     tgz_name = string_time + '.tgz'
-    local("tar -cvzf versions/web_static_{} web_static".format(tgz_name))
     local("mkdir -p versions")
+    local("tar -cvzf versions/web_static_{} web_static".format(tgz_name))
     path_tgz = 'versions/web_static_{}'.format(tgz_name)
-    if path_tgz in os.path:
+    if os.path.exists(path_tgz):
         return path_tgz
     else:
         return None
