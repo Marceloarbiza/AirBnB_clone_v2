@@ -50,3 +50,8 @@ def do_deploy(archive_path):
             return False
     else:
         return False
+
+
+def deploy():
+    """ deploy """
+    return True
