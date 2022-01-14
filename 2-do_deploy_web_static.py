@@ -38,19 +38,18 @@ def do_deploy(archive_path):
 
     try:
         file_tgz = file_n = archive_path.split("/")[-1]
-        file_no_ext = file_tgz.split(".")[0]
+        f_no_ext = file_tgz.split(".")[0]
         dir_tmp = "/tmp/{}".format(file_tgz)
-        dir_releases = "/data/web_static/releases/"
-        rel_noext = dir_releases + file_no_ext
+        dir_rel = "/data/web_static/releases/"
+        rel_noext = dir_rel + f_no_ext
         put(archive_path, '/tmp/')
-        run('mkdir -p {}{}/'.format(dir_releases, file_no_ext))
-        run('tar -xzf {} -C {}{}/'.format(dir_tmp, dir_releases, file_no_ext))
+        run('mkdir -p {}{}/'.format(dir_rel, f_no_ext))
+        run('tar -xzf {} -C {}{}/'.format(dir_tmp, dir_rel, f_no_ext))
         run('rm {}'.format(dir_tmp))
         run('mv {}/web_static/* {}/'.format(rel_noext))
-        run('rm -rf {}{}/web_static'.format(dir_releases, file_no_ext))
+        run('rm -rf {}{}/web_static'.format(dir_rel, f_no_ext))
         run('rm -rf /data/web_static/current')
-        run('ln -s {}{}/ /data/web_static/current'
-            .format(dir_releases, file_no_ext))
+        run('ln -s {}{}/ /data/web_static/current'.format(dir_rel, f_no_ext))
         return True
     except Exception:
         return False
