@@ -52,5 +52,5 @@ def do_deploy(archive_path):
         run("rm -rf /data/web_static/releases/web_static_{}/web_static"
             .format(ar_path_no_ext))
         return True
-    except:
+    except Exception:
         return False
