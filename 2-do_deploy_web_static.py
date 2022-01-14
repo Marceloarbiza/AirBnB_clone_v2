@@ -32,23 +32,25 @@ def do_pack():
 
 def do_deploy(archive_path):
     """ do_deploy """
-    if not os.path.exists(archive_path):
+    if os.path.exists(archive_path) is False:
         return False
     try:
-        put(archive_path, "/tmp")
+        put(archive_path, "/tmp/")
         ar_path_no_ext = archive_patch.split('.')[0]
-        ar_path_no_ext = archive_patch.split('/')[1]
+        ar_path_no_ext = archive_patch.split('/')[-1]
         run("mkdir -p /data/web_static/releases/{}".format(ar_path_no_ext))
         ar_tmp = '/tmp/{}.tgz'.format(ar_path_no_ext)
         run("tar -xvzf {} -C /data/web_static/releases/{}"
             .format(ar_tmp, ar_path_no_ext))
         run("rm {}".format(ar_tmp))
+        run("mv /data/web_static/releases/web_static_{}/\
+            web_static/* /data/web_static/releases/web_static_{}/"
+            .format(ar_path_no_ext, ar_path_no_ext))
         run("rm -rf /data/web_static/current")
         run("ln -sf /data/web_static/releases/{} /data/web_static/current"
             .format(ar_path_no_ext))
-        run("mv /data/web_static/releases/web_static_{}/web_static/* /data/web_static/releases/web_static_{}/"
-            .format(ar_path_no_ext, ar_path_no_ext))
         run("rm -rf /data/web_static/releases/web_static_{}/web_static"
             .format(ar_path_no_ext))
+        return True
     except:
-        False
+        return False
