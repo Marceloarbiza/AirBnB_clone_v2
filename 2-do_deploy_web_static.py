@@ -36,13 +36,12 @@ def do_deploy(archive_path):
     if exists(archive_path) is False:
         return False
 
-    file_tgz = file_n = archive_path.split("/")[-1]
-    file_no_ext = file_tgz.split(".")[0]
-    dir_tmp = "/tmp/{}".format(file_tgz)
-    dir_releases = "/data/web_static/releases/"
-    rel_noext = dir_releases + file_no_ext
-
     try:
+        file_tgz = file_n = archive_path.split("/")[-1]
+        file_no_ext = file_tgz.split(".")[0]
+        dir_tmp = "/tmp/{}".format(file_tgz)
+        dir_releases = "/data/web_static/releases/"
+        rel_noext = dir_releases + file_no_ext
         put(archive_path, '/tmp/')
         run('mkdir -p {}{}/'.format(dir_releases, file_no_ext))
         run('tar -xzf {} -C {}{}/'.format(dir_tmp, dir_releases, file_no_ext))
