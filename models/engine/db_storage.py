@@ -19,6 +19,8 @@ class DBStorage():
     __engine = None
     __session = None
 
+
+
     def __init__(self):
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(
                                       os.getenv('HBNB_MYSQL_USER'),
@@ -69,4 +71,6 @@ class DBStorage():
 
     def close(self):
         """ close session """
-        self.__session.close()
+        self.__session.remove()
+
+
