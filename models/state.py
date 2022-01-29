@@ -23,6 +23,6 @@ class State(BaseModel, Base):
             ret_cities = []
             all_cities = storage.all(City)
             for c in all_cities.values():
-                if c.state_id == seld.id:
+                if c.state_id == self.id:
                     ret_cities.append(c)
             return ret_cities
