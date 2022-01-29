@@ -1,30 +1,26 @@
 #!/usr/bin/python3
-"""
-    /number/<n>: display “n is a number”
-    only if n is an integer
-"""
+"""python flask script"""
 
 
-from flask import Flask, render_template
 from models import storage
-
+from flask import Flask, render_template
 
 app = Flask(__name__)
+app.url_map.strict_slashes = False
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 
 
-@app.route('/states_list', strict_slashes=False)
-def states_list():
-    """ states """
-    all_states = sorted(list(storage.all('State').
-                        values()), key=lambda s: s.name)
-    return render_template('7-states_list.html', all_states=states)
+@app.route("/states_list")
+def list_states():
+    """display all states in html"""
+    states = sorted(list(storage.all("State").values()), key=lambda x: x.name)
+    return render_template("7-states_list.html", states=states)
 
 
 @app.teardown_appcontext
-def teardown_():
-    """ close storage """
+def teardown():
+    """close session"""
     storage.close()
 
 
