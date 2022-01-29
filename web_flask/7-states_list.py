@@ -1,28 +1,25 @@
 #!/usr/bin/python3
-"""python flask script"""
-
+"""a script that starts a Flask web application"""
 
 from models import storage
-from flask import Flask, render_template
-
+from models.state import State
+from flask import Flask
+from flask import render_template
 app = Flask(__name__)
-app.url_map.strict_slashes = False
-app.jinja_env.trim_blocks = True
-app.jinja_env.lstrip_blocks = True
 
 
-@app.route("/states_list")
-def list_states():
-    """display all states in html"""
-    states = sorted(list(storage.all("State").values()), key=lambda x: x.name)
-    return render_template("7-states_list.html", states=states)
+@app.route('/states_list', strict_slashes=False)
+def states():
+    """Returns a html listing the states"""
+    return render_template('7-states_list.html',
+                           states=storage.all('State').values())
 
 
 @app.teardown_appcontext
-def teardown():
-    """close session"""
+def teardown(self):
+    """remove the current SQLAlchemy Session"""
     storage.close()
 
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
