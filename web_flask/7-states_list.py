@@ -12,18 +12,18 @@ from models import storage
 app = Flask(__name__)
 
 
+@app.route('/states_list', strict_slashes=False)
+def states():
+    """ states """
+    all_states = sorted(list(storage.all('State').
+                        values()), key=lambda x: x.name)
+    return render_template('7-states_list.html', all_statesi=states)
+
+
 @app.teardown_appcontext
 def teardown_():
     """ close storage """
     storage.close()
-
-
-@app.route('/states_list', strict_slashes=False)
-def states():
-    """ states """
-    all_states = sorted(list(storage.all("State").
-                        values()), key=lambda x: x.name)
-    return render_template('7-states_list.html', all_states_sorted=states)
 
 
 if __name__ == "__main__":
