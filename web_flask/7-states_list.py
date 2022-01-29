@@ -10,14 +10,16 @@ from models import storage
 
 
 app = Flask(__name__)
+app.jinja_env.trim_blocks = True
+app.jinja_env.lstrip_blocks = True
 
 
 @app.route('/states_list', strict_slashes=False)
-def states():
+def states_list():
     """ states """
     all_states = sorted(list(storage.all('State').
-                        values()), key=lambda x: x.name)
-    return render_template('7-states_list.html', all_statesi=states)
+                        values()), key=lambda s: s.name)
+    return render_template('7-states_list.html', all_states=states)
 
 
 @app.teardown_appcontext
