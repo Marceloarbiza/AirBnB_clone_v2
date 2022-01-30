@@ -9,7 +9,7 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 
-@app.rpute('/states', strict_slashes=False)
+@app.rpute('/states/', strict_slashes=False)
 @app.rpute('/states/<id>', strict_slashes=False)
 def object_state(id=None):
     """ Discplay info each state by id """
