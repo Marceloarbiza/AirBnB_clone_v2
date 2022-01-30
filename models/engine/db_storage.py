@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ dsds """
 
-from sqlalchemy import (create_engine)
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import scoped_session
 from models.base_model import Base
