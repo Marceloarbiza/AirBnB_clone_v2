@@ -13,15 +13,17 @@ class State(BaseModel, Base):
     """for sqlalchemy"""
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
-    cities = relationship("City", cascade="all, delete-orphan",
-                          backref="states")
+    if (getenv("HBNB_TYPE_STORAGE") == "db"):
+        cities = relationship("City", backref="state",
+                              cascade="all, delete-orphan")
 
-    @property
-    def cities(self):
-        """getter aall cities of State"""
-        from models import storage
-        all_cities = []
-        for c in list(storage.all(City).values()):
-            if c.state_id == self.id:
-                all_cities.append(c)
-        return all_cities
+    else:
+        @property
+        def cities(self):
+            """getter aall cities of State"""
+            from models import storage
+            all_cities = []
+            for c in list(storage.all(City).values()):
+                if c.state_id == self.id:
+                    all_cities.append(c)
+            return all_cities
