@@ -9,7 +9,7 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 
-@app.route('/states_list', strict_slashes=False)
+@app.route('/cities_by_states', strict_slashes=False)
 def display_states():
     """ Display the states"""
     storage_states = storage.all('State')
