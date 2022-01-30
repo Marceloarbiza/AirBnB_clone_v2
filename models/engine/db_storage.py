@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" dsds """
+"""
+    DB - Storage
+"""
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -40,17 +42,18 @@ class DBStorage():
 
     def all(self, cls=None):
         """ all """
-        dicto = {}
-        if cls:
-            for s in self.__session.query(cls):
-                k = type(s).__name__ + '.' + s.id
-                dicto[k] = s
-            return dicto
+        if cls is None:
+            for c in CLASSES.values():
+                for obj in self.__session.query(c).all():
+                    key = type(obj).__name__ + "." + obj.id
+                    del obj.__dict__["_sa_instance_state"]
+                    new_dict[key] = obj
         else:
-            for cl in dict_class.values():
-                for s in self.__session.query(cl).all():
-                    k = type(s).__name__ + '.' + s.id
-                    dicto[k] = s
+            for obj in self.__session.query(cls).all():
+                key = type(obj).__name__ + "." + obj.id
+                new_dict[key] = obj
+
+            return (new_dict)
 
     def new(self, obj):
         """  add the object to the current database session """
