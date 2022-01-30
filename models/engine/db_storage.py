@@ -4,29 +4,23 @@
 """
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import scoped_session
-from models.base_model import Base
-from models.state import State
-from models.city import City
-from models.user import User
-from models.place import Place
-from models.review import Review
-from models.amenity import Amenity
-import os
 from os import getenv
+from models.base_model import Base
+from sqlalchemy.orm import sessionmaker, scoped_session
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
+from models.state import State
+from models.user import User
 
 
-dict_class = {'State': State,
-              'City': City,
-              'User': User,
-              'Place': Place,
-              'Review': Review,
-              'Amenity': Amenity}
+CLASSES = {"Amenity": Amenity, "City": City, "Place": Place,
+           "Review": Review, "State": State, "User": User}
 
 
-class DBStorage():
-    """ storage """
+class DBStorage:
+    """interacts with the MySQL server"""
     __engine = None
     __session = None
 
@@ -43,7 +37,8 @@ class DBStorage():
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """ all """
+        """query on the current database session"""
+        new_dict = {}
         if cls is None:
             for c in CLASSES.values():
                 for obj in self.__session.query(c).all():
@@ -58,25 +53,26 @@ class DBStorage():
             return (new_dict)
 
     def new(self, obj):
-        """  add the object to the current database session """
+        """add obj to the current database session."""
         self.__session.add(obj)
 
     def save(self):
-        """ commit all changes of the current database session """
+        """commit all changes of the current database session"""
         self.__session.commit()
 
     def delete(self, obj=None):
-        """ delete from the current database session """
-        if obj:
+        """ delete from the current database session obj if not None"""
+        if obj is not None:
             self.__session.delete(obj)
 
     def reload(self):
-        """ create all tables in the database (feature of SQLAlchemy) """
+        """create all tables in the database and initialize session"""
         Base.metadata.create_all(self.__engine)
-        session = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        Session = scoped_session(session)
+        session_factory = sessionmaker(bind=self.__engine,
+                                       expire_on_commit=False)
+        Session = scoped_session(session_factory)
         self.__session = Session()
 
     def close(self):
-        """ close session """
-        self.__session.remove()
+        """call remove() method on the private session attribute"""
+        self.__session.close()
