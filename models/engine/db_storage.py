@@ -43,11 +43,13 @@ class DBStorage():
         dicto = {}
         if cls:
             for s in self.__session.query(cls):
-                dicto[f'{s.__class__.__name__}.{s.id}'] = s
+                k = type(s).__name__ + '.' + s.id
+                dicto[k] = s
         else:
             for cl in dict_class.values():
-                for s in self.__session.query(cl):
-                    dicto[f'{s.__class__.__name__}.{s.id}'] = s
+                for s in self.__session.query(cl).all():
+                    k = type(s).__name__ + '.' + s.id
+                    dicto[k] = s
         return dicto
 
     def new(self, obj):
