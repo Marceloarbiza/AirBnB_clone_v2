@@ -11,17 +11,13 @@ class FileStorage:
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         if cls:
-            cls_name = str(cls).split(".")[2].split("'")[0]
-            cls_inst = {}
-            for k in FileStorage.__objects.keys():
-                if cls_name in k:
-                    cls_inst[k] = FileStorage.__objects[k]
-            return cls_inst
-        return FileStorage.__objects
+            return {key: obj for (key, obj)
+                    in self.__objects.items() if isinstance(obj, cls)}
+        return self.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
-        self.__objects["{}.{}".format(type(obj).__name__, obj.id)] = obj
+        self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
 
     def save(self):
         """Saves storage dictionary to file"""
@@ -31,17 +27,6 @@ class FileStorage:
             for key, val in temp.items():
                 temp[key] = val.to_dict()
             json.dump(temp, f)
-
-    def delete(self, obj=None):
-        """to delete obj from __objects if it’s inside
-        if obj is equal to None, the method should not do anything"""
-        if obj:
-            try:
-                del self.__objects[obj.to_dict()['__class__'] + '.' + obj.id]
-            except Exception:
-                pass
-        else:
-            return
 
     def reload(self):
         """Loads storage dictionary from file"""
@@ -54,10 +39,10 @@ class FileStorage:
         from models.review import Review
 
         classes = {
-                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
-                    'State': State, 'City': City, 'Amenity': Amenity,
-                    'Review': Review
-                  }
+            'BaseModel': BaseModel, 'User': User, 'Place': Place,
+            'State': State, 'City': City, 'Amenity': Amenity,
+            'Review': Review
+        }
         try:
             temp = {}
             with open(FileStorage.__file_path, 'r') as f:
@@ -67,5 +52,14 @@ class FileStorage:
         except FileNotFoundError:
             pass
 
+    def delete(self, obj=None):
+        """Delete an object from objects"""
+        if obj:
+            key = "{}.{}".format(type(obj).__name__, obj.id)
+            if (key, obj) in self.__objects.items():
+                self.__objects.pop(key, None)
+        self.save()
+
     def close(self):
-        return self.reload()
+        """Deserializes the JSON file"""
+        self.reload()
