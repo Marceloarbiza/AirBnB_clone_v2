@@ -13,16 +13,12 @@ app = Flask(__name__)
 @app.route('/states/<id>', strict_slashes=False)
 def object_state(id=None):
     """ Discplay info each state by id """
-    if id is None:
-        storage_states = storage.all('State')
-        return render_template('9-states.html', storage_states=states)
-    else:
-        storage_states = storage.all('State')
-        for s in storage_states.values():
-            if s.id == id:
-                return render_template('9-states.html', s=state)
-    return render_template('9-states.html')
-
+    storage_states = storage.all('State')
+    id_state = id
+    if id_state not None:
+        id_state = '{}.{}'.format('State', id)
+    return render_template('9-states.html', storage_states=states,
+                           id_state=id_state)
 
 @app.teardown_appcontext
 def teardown(self):
