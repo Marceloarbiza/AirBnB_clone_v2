@@ -31,8 +31,7 @@ class FileStorage:
     def delete(self, obj=None):
         """ Delete obj from __objects """
         if obj:
-            cls = (str(type(obj)).split('.')[-1]).split('\'')[0]
-            FileStorage.__objects.pop(f'{cls}.{obj.id}')
+            del self.__objects[obj.to_dict()['__class__'] + '.' + obj.id]
 
     def reload(self):
         """Loads storage dictionary from file"""
