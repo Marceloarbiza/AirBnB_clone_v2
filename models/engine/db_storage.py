@@ -48,13 +48,12 @@ class DBStorage:
             for c in dict_class.values():
                 for s in self.__session.query(c).all():
                     k = type(s).__name__ + "." + s.id
-                    # del s.__dict__['_sa_instance_state']
                     dicto[k] = s
         else:
             for s in self.__session.query(cls).all():
                 k = type(s).__name__ + "." + s.id
                 dicto[k] = s
-            return dicto
+        return dicto
 
     def new(self, obj):
         """add obj to the current database session."""
