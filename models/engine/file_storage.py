@@ -10,19 +10,18 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-        __objects_all_cls = {}
-        cls2 = (str(cls).split('.')[-1]).split('\'')[0]
         if cls:
-            for k, v in FileStorage.__objects.items():
-                key_cls = k.split('.')[0]
-                if key_cls == cls2:
-                    __objects_all_cls[k] = v
-            return __objects_all_cls
+            cls_name = str(cls).split(".")[2].split("'")[0]
+            cls_inst = {}
+            for k in FileStorage.__objects.keys():
+                if cls_name in k:
+                    cls_inst[k] = FileStorage.__objects[k]
+            return cls_inst
         return FileStorage.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
-        self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
+        self.__objects["{}.{}".format(type(obj).__name__, obj.id)] = obj
 
     def save(self):
         """Saves storage dictionary to file"""
@@ -34,10 +33,15 @@ class FileStorage:
             json.dump(temp, f)
 
     def delete(self, obj=None):
-        """ Delete obj from __objects """
+        """to delete obj from __objects if it’s inside
+        if obj is equal to None, the method should not do anything"""
         if obj:
-            cls = (str(type(obj)).split('.')[-1]).split('\'')[0]
-            FileStorage.__objects.pop(f'{cls}.{obj.id}')
+            try:
+                del self.__objects[obj.to_dict()['__class__'] + '.' + obj.id]
+            except Exception:
+                pass
+        else:
+            return
 
     def reload(self):
         """Loads storage dictionary from file"""
@@ -64,5 +68,4 @@ class FileStorage:
             pass
 
     def close(self):
-        """ close """
         return self.reload()
