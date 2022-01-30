@@ -49,11 +49,11 @@ class DBStorage:
                 for s in self.__session.query(c).all():
                     k = type(s).__name__ + "." + s.id
                     del s.__dict__['_sa_instance_state']
-                    new_dict[k] = s
+                    dicto[k] = s
         else:
             for s in self.__session.query(cls).all():
                 k = type(s).__name__ + "." + s.id
-                new_dict[k] = s
+                dicto[k] = s
             return dicto
 
     def new(self, obj):
