@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" This is the place class """
+""" Place Module for HBNB project """
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
@@ -9,17 +9,17 @@ from models.amenity import Amenity
 import models
 
 
-place_amenity = Table("place_amenity", Base.metadata,
-                      Column("place_id", String(60), ForeignKey(
-                          "places.id"), primary_key=True, nullable=False),
-                      Column("amenity_id", String(60), ForeignKey(
-                          "amenities.id"), primary_key=True, nullable=False))
+place_amenity = Table('place_amenity', Base.metadata,
+                      Column('place_id', String(60), ForeignKey(
+                          'places.id'), primary_key=True, nullable=False),
+                      Column('amenity_id', String(60), ForeignKey(
+                          'amenities.id'), primary_key=True, nullable=False))
 
 
 class Place(BaseModel, Base):
-    """ --> place to stay <--"""
-    __tablename__ = "places"
-    if getenv("HBNB_TYPE_STORAGE") == "db":
+    """ A place to stay """
+    __tablename__ = 'places'
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
         name = Column(String(128), nullable=False)
@@ -31,8 +31,8 @@ class Place(BaseModel, Base):
         latitude = Column(Float)
         longitude = Column(Float)
         amenity_ids = []
-        reviews = relationship("Review", cascade="delete", backref="Place")
-        amenities = relationship("Amenity", secondary="place_amenity",
+        reviews = relationship('Review', cascade='delete', backref='Place')
+        amenities = relationship('Amenity', secondary='place_amenity',
                                  viewonly=False)
     else:
         city_id = user_id = name = description = ""
@@ -42,7 +42,7 @@ class Place(BaseModel, Base):
 
         @property
         def reviews(self):
-            """getter attribute cities"""
+            """ list of reviews"""
             review_list = []
             for review in models.storage.all(Review).values():
                 if review.place_id == self.id:
@@ -51,12 +51,12 @@ class Place(BaseModel, Base):
 
         @property
         def amenities(self):
-            """getter amenities id"""
+            """ list of amenities """
             return self.amenity_ids
 
         @amenities.setter
         def amenities(self, obj):
-            """setter attribute cities"""
+            """ set id to perspective atrribute """
             if isinstance(obj, Amenity):
                 if obj.id not in self.amenity_ids:
                     self.amenity_ids.append(obj.id)

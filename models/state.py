@@ -10,16 +10,16 @@ import models
 
 class State(BaseModel, Base):
     """ State class """
-    __tablename__ = "states"
-    if getenv("HBNB_TYPE_STORAGE") == "db":
+    __tablename__ = 'states'
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
         name = Column(String(128), nullable=False)
-        cities = relationship("City", backref="state", cascade="delete")
+        cities = relationship('City', backref='state', cascade='delete')
     else:
         name = ""
 
         @property
         def cities(self):
-            """getter attribute to get cities list"""
+            """ storage """
             city_list = []
             for city in models.storage.all(City).values():
                 if city.state_id == self.id:
