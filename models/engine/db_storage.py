@@ -14,6 +14,7 @@ from models.place import Place
 from models.review import Review
 from models.amenity import Amenity
 import os
+from os import getenv
 
 
 dict_class = {'State': State,
@@ -30,14 +31,15 @@ class DBStorage():
     __session = None
 
     def __init__(self):
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(
-                                      os.getenv('HBNB_MYSQL_USER'),
-                                      os.getenv('HBNB_MYSQL_PWD'),
-                                      os.getenv('HBNB_MYSQL_HOST'),
-                                      os.getenv('HBNB_MYSQL_DB')),
+        USER = getenv('HBNB_MYSQL_USER')
+        PWD = getenv('HBNB_MYSQL_PWD')
+        HOST = getenv('HBNB_MYSQL_HOST')
+        DB = getenv('HBNB_MYSQL_DB')
+        ENV = getenv('HBNB_ENV')
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
+                                      format(USER, PWD, HOST, DB),
                                       pool_pre_ping=True)
-
-        if os.getenv('HBNB_ENV') == 'test':
+        if ENV == "test":
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
