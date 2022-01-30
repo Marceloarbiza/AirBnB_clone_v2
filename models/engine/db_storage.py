@@ -4,36 +4,41 @@
 """
 
 from sqlalchemy import create_engine
-from os import getenv
 from models.base_model import Base
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import scoped_session
 from models.city import City
 from models.place import Place
 from models.amenity import Amenity
 from models.review import Review
 from models.state import State
 from models.user import User
+from os import getenv
 
 
-CLASSES = {"Amenity": Amenity, "City": City, "Place": Place,
-           "Review": Review, "State": State, "User": User}
+dict_class = {"Amenity": Amenity,
+              "City": City,
+              "Place": Place,
+              "Review": Review,
+              "State": State,
+              "User": User}
 
 
 class DBStorage:
-    """interacts with the MySQL server"""
+    """ DBStorage """
     __engine = None
     __session = None
 
     def __init__(self):
-        USER = getenv('HBNB_MYSQL_USER')
-        PWD = getenv('HBNB_MYSQL_PWD')
-        HOST = getenv('HBNB_MYSQL_HOST')
-        DB = getenv('HBNB_MYSQL_DB')
-        ENV = getenv('HBNB_ENV')
+        """ __init__ """
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
-                                      format(USER, PWD, HOST, DB),
+                                      format(getenv('HBNB_MYSQL_USER'),
+                                             getenv('HBNB_MYSQL_PWD'),
+                                             getenv('HBNB_MYSQL_HOST'),
+                                             getenv('HBNB_MYSQL_DB')),
                                       pool_pre_ping=True)
-        if ENV == "test":
+
+        if getenv('HBNB_ENV') == "test":
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
