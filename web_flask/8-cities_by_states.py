@@ -12,8 +12,8 @@ app = Flask(__name__)
 @app.route('/cities_by_states', strict_slashes=False)
 def display_states():
     """ Display the states"""
-    storage_states = storage.all('State')
-    return render_template('8-cities_by_states.html', storage_states=states)
+    storage_states = storage.all(State)
+    return render_template('8-cities_by_states.html', states=storage_states)
 
 
 @app.teardown_appcontext
