@@ -14,10 +14,10 @@ app = Flask(__name__)
 def states(state_id=None):
     """ Display cities for echa State id """
     storage_states = storage.all(State)
-    if id_state is not None:
-        id_state = '{}.{}'.format('State', id_state)
+    if state_id is not None:
+        state_id = '{}.{}'.format('State', state_id)
     return render_template('9-states.html', states=storage_states,
-                           id_state=id_state)
+                           state_id=state_id)
 
 
 @app.teardown_appcontext
