@@ -11,12 +11,14 @@ app = Flask(__name__)
 
 @app.route('/states', strict_slashes=False)
 @app.route('/states/<state_id>', strict_slashes=False)
-def states(state_id=None):
+def states(id=None):
     """display a HTML page: (inside the tag BODY)"""
-    states = storage.all(State)
-    if state_id is not None:
-        state_id = 'State.' + state_id
-    return render_template('9-states.html', states=states, state_id=state_id)
+    storage_states = storage.all(State)
+    id_state = id
+    if id_state is not None:
+        id_state = '{}.{}'.format('State', id_state)
+    return render_template('9-states.html', states=storage_states,
+                           id_state=id_state)
 
 
 @app.teardown_appcontext
