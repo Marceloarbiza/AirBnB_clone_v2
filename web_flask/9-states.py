@@ -16,7 +16,7 @@ def states(id=None):
     storage_states = storage.all(State)
     id_state = id
     if id_state is not None:
-        id_state = '{}.{}'.format('State', id_state)
+        id_state = 'State.' + id_state
     return render_template('9-states.html', states=storage_states,
                            id_state=id_state)
 
