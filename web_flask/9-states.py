@@ -1,38 +1,34 @@
 #!/usr/bin/python3
-""" App Flask """
+"""Starts a Flask web application"""
 
 from models import storage
 from models.state import State
-from flask import Flask, render_template
-
-
+from flask import Flask
+from flask import render_template
 app = Flask(__name__)
 
 
 @app.route('/states', strict_slashes=False)
-def display_states():
-    """ Display the states"""
-    storage_states = storage.all(State)
-    return render_template('7-states_list.html', states=storage_states)
-
-
 @app.route('/states/<id>', strict_slashes=False)
-def display_cities(id):
-    """ Display cities by id State """
-    storage_states = storage.all(State)
-    id_state = '{}.{}'.format('State', id)
-    if is_state in storage_states:
-        storage_states = storage_states[id_state]
+def lookstates(id=None):
+    """if id is given list all cities of that State else, list all States"""
+    states = storage.all(State)
+    if id:
+        key = '{}.{}'.format('State', id)
+        if key in states:
+            states = states[key]
+        else:
+            states = None
     else:
-        storage_states = None
-    return render_template('9-states.html', states=storage_states)
+        states = storage.all(State).values()
+    return render_template('9-states.html', states=states, id=id)
 
 
 @app.teardown_appcontext
 def teardown(self):
-    """ close storage """
+    """remove the current SQLAlchemy Session"""
     storage.close()
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0')
