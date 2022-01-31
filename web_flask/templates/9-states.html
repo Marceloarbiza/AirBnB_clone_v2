@@ -9,22 +9,22 @@
     {% if not id_state %}
     <H1>States</H1>
         <UL>
-            {% for s in states.values()|sort(attribute='name') %}
-                <LI>{{ s.id }}: <B>{{ s.name }}</B></LI>
-            {% endfor %}
+        {% for s in states.values()|sort(attribute='name') %}
+            <LI>{{ s.id }}: <B>{{ s.name }}</B></LI>
+        {% endfor %}
         </UL>
-        {% elif id_state in states %}
-        {% set s = states[id_state] %}
+    {% elif id_state in states %}
+    {% set s = states[id_state] %}
         <H1>State: {{ s.name }}</H1>
         <H3>Cities</H3>
         <UL>
-            {% for c in s.cities|sort(attribute='name') %}
-                <LI>{{ c.id }}: <B>{{ c.name }}</B></LI>
-            {% endfor %}
+        {% for c in s.cities|sort(attribute='name') %}
+            <LI>{{ c.id }}: <B>{{ c.name }}</B></LI>
+        {% endfor %}
         </UL>
-        {% else %}
+    {% else %}
             <H1>Not found!</H1>
-        {% endif %}
+    {% endif %}
 </BODY>
 
 </HTML>
