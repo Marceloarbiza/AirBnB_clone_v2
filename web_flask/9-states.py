@@ -12,20 +12,20 @@ app = Flask(__name__)
 @app.route('/states', strict_slashes=False)
 def display_states():
     """ Display the states"""
-    storage_states = storage.all('State')
-    return render_template('7-states_list.html', storage_states=states)
+    storage_states = storage.all(State)
+    return render_template('7-states_list.html', states=storage_states)
 
 
 @app.route('/states/<id>', strict_slashes=False)
 def display_cities(id):
     """ Display cities by id State """
-    storage_states = storage.all('State')
+    storage_states = storage.all(State)
     id_state = '{}.{}'.format('State', id)
     if is_state in storage_states:
         storage_states = storage_states[id_state]
     else:
         storage_states = None
-    return render_template('9-states.html', storage_states=states)
+    return render_template('9-states.html', states=storage_states)
 
 
 @app.teardown_appcontext
